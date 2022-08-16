@@ -82,6 +82,10 @@ git tag -a v1.2 9fceb02 -m "my tag"  # 给指定的某个commit(Hash)号加tag
 git push origin v1.0    # 将tag同步到远程服务器
 
 git push origin --tags  # 推送所有tag：
+
+git tag -d [标签名]     # 删除标签，本地的
+git push origin :refs/tags/标签名   # 删除远程 origin 的标签
+
 ```
 ![](./2.png)
 ## 5.  branch、tag、release
