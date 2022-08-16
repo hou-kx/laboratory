@@ -1,0 +1,40 @@
+    public void easyExcelExecute01(int... pageSizePara) {
+        //定义文件输出位置
+        FileOutputStream outputStream;
+        try {
+            int pageSize = pageSizePara.length == 0 ? DEFAULT_PAGE_SIZE : pageSizePara[0];
+
+            outputStream = new FileOutputStream(RELATIVE_PATH_DOC + String.format("easy-excel-export-user-00%d.xlsx", pageSize));
+
+            ExcelWriter excelWriter = EasyExcel.write(outputStream, LaboratoryUserDto.class).build();
+            WriteSheet writeSheet = EasyExcel.writerSheet("用户信息").build();
+
+            int total = userService.countAllUsers();
+
+            final long startTime = System.currentTimeMillis();
+
+            for (int curPage = 0; curPage <= total / pageSize; curPage++) {
+                List<LaboratoryUserDto> userDtoList = userService.findAllUsersPage(curPage * pageSize, pageSize);
+
+                if (CollectionUtils.isNotEmpty(userDtoList)) {
+                    // 第一次会生成表头，后续追加写入文件中
+                    excelWriter.write(userDtoList, writeSheet);
+                }
+                if (curPage == total / pageSize - 1) {
+                    System.out.println("====== Export data to excel, it  has spent " + (System.currentTimeMillis() - startTime) + "  ms, pageSize:" + pageSize);
+                }
+            }
+            excelWriter.finish();
+            outputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void executeTest01() {
+        List<Integer> pageList = Arrays.asList(1000000, 100000, 10000, 1000);
+        for (int pageSize : pageList) {
+            easyExcelExecute01(pageSize);
+        }
+    }
