@@ -6,6 +6,8 @@
 # 生成成功后 在windows本地 ~\.ssh\id_rsa.pub 记事本打开复制到：
 # github ->  settings -> SSH keys -> New SSH key
 ssh-keygen -t rsa -C "your login email"
+
+# 这里Enter passphrase 时 本机使用可不设密码，直接enter确认跳过
 ```
 ## 1.2 配置 远程仓库用户名，邮箱
 ```sh
